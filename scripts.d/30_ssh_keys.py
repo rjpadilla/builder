@@ -6,7 +6,7 @@ import requests
 import os
 
 headers = {
-    "Authorization": "token %s" % os.environ.get("APIKEY"),
+    "Authorization": "token %s" % os.environ.get("GITHUB_KEY"),
     "Connection": "close"
 }
 
