@@ -20,7 +20,7 @@ def get_members(members,page):
     request = requests.get(api, headers=headers)
     users = request.json()
     for user in users:
-        members.append(user['login'])
+        members.append(users['login'])
     count = len(users)
 
     if(count > 0):
