@@ -10,6 +10,8 @@ headers = {
     "Connection": "close"
 }
 
+print(os.environ.get("GITHUB_KEY"))
+
 # Retrieve a list of public members using gitHub API
 
 def get_members(members,page):
