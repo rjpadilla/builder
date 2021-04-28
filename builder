@@ -273,13 +273,22 @@ echo "$IMAGE_ZIP"
 IMAGE=${IMAGE_ZIP%.zip}.img
 echo "$IMAGE"
 
+echo 10 
+env
+
 if [ ! -e "$IMAGE_ZIP" ]; then
     _get_image
 fi
 
+echo 11
+env
+
 _decompress_image
 _resize_image
 _open_image
+
+echo 12
+env
 
 if [[ "$1" == "--chroot" ]] ; then
     _modify_image
@@ -293,7 +302,7 @@ else
     die "Usage error. Try $0 --help"
 fi
 
-echo 10 
+echo 13 
 env
 
 #if [[ $space_left -lt $MINIMAL_SPACE_LEFT ]]; then
