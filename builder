@@ -224,13 +224,13 @@ if [[ $# -eq 0 || "$*" == *-h* ]] ; then
     exit 1
 fi
 
-if [[ "$USER" != root && $(id -u) != "0" ]] ; then
-    # restart as root
-    echo "Switching over to run as root"
-    exec sudo "$(readlink -f "$0")" "$@"
-    echo "Need sudo permission to run as root!"
-    exit 1
-fi
+# if [[ "$USER" != root && $(id -u) != "0" ]] ; then
+#     # restart as root
+#     echo "Switching over to run as root"
+#     exec sudo "$(readlink -f "$0")" "$@"
+#     echo "Need sudo permission to run as root!"
+#     exit 1
+# fi
 
 if grep -wq "$(readlink -f mnt)" /proc/self/mounts; then
     die "mnt/ is already mounted!"
