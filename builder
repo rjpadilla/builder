@@ -4,7 +4,8 @@
 # Raspbian
 #RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-05-28/2020-05-27-raspios-buster-armhf.zip.torrent
 RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-08-24/2020-08-20-raspios-buster-armhf.zip.torrent
-
+echo 6
+env
 #RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
 RASPBIAN_SHA256=9d658abe6d97f86320e5a0288df17e6fcdd8776311cc320899719aa805106c52
 
@@ -27,7 +28,8 @@ if (( ${#missing_deps[@]} > 0 )) ; then
     On Debian/Ubuntu try 'sudo apt install kpartx qemu-user-static parted wget curl jq aria2'"
 
 fi
-
+echo 5
+env
 function _umount {
     for dir in "$@" ; do
         if grep -q "$dir" /proc/self/mounts ; then
@@ -49,7 +51,8 @@ function _get_image {
     echo -n "Checksum of "
     sha256sum --strict --check - <<<"$RASPBIAN_SHA256 *$IMAGE_ZIP" || die "Download checksum validation failed, please check http://www.raspberrypi.org/downloads"
 }
-
+echo 4
+env
 function _decompress_image {
     unzip -o "$IMAGE_ZIP" -d images || die "Could not unzip $IMAGE_ZIP"
 }
@@ -66,7 +69,8 @@ function _enable_daemons {
     POLICY_RC_D=mnt/img_root/usr/sbin/policy-rc.d
     rm -f $POLICY_RC_D
 }
-
+echo 3
+env
 function _disable_ld_preload {
     cfg=mnt/img_root/etc/ld.so.preload
 
@@ -123,7 +127,8 @@ EOF
         rm "$RASPBIAN_IMAGE_FILE"
     fi
 }
-
+echo 2
+env
 function _open_image {
     echo "Stupid Snaps"
     losetup -a | grep 'loop'
@@ -165,7 +170,8 @@ function _prepare_chroot {
     mkdir -p apt_cache
     mount --bind apt_cache mnt/img_root/var/cache/apt/archives
 }
-
+echo 1
+env
 function _cleanup_chroot {
     _umount mnt/img_root/var/cache/apt/archives \
         mnt/img_root/{proc,sys,run,dev/pts}
@@ -177,7 +183,8 @@ function _check_space_left {
     space_left=$(df | grep "dev/mapper/loop$LOOP_BASE\p2" | awk '{printf $4}')
     echo "Space left: ${space_left}K"
 }
-
+echo 0
+env
 function _count_authorized_keys_lines {
     authorized_keys_lines=$(wc -l < mnt/img_root/root/.ssh/authorized_keys)
     echo "There are ${authorized_keys_lines} line(s) in /root/.ssh/authorized_keys"
