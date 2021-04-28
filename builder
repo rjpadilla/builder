@@ -4,7 +4,7 @@
 # Raspbian
 #RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-05-28/2020-05-27-raspios-buster-armhf.zip.torrent
 RASPBIAN_TORRENT_URL=http://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2020-08-24/2020-08-20-raspios-buster-armhf.zip.torrent
-echo 6
+echo 0
 env
 #RASPBIAN_SHA256=b9a5c5321b3145e605b3bcd297ca9ffc350ecb1844880afd8fb75a7589b7bd04
 RASPBIAN_SHA256=9d658abe6d97f86320e5a0288df17e6fcdd8776311cc320899719aa805106c52
@@ -28,7 +28,7 @@ if (( ${#missing_deps[@]} > 0 )) ; then
     On Debian/Ubuntu try 'sudo apt install kpartx qemu-user-static parted wget curl jq aria2'"
 
 fi
-echo 5
+echo 1
 env
 function _umount {
     for dir in "$@" ; do
@@ -48,10 +48,10 @@ function _get_image {
       wget "$RASPBIAN_TORRENT_URL" -O "$RASPBIAN_TORRENT" || die "Download of $RASPBIAN_TORRENT failed"
     fi
     aria2c --enable-dht=true --bt-enable-lpd=true --continue "$RASPBIAN_TORRENT" -d images --seed-time 0
-    echo -n "Checksum of "
+    ncho -n "Checksum of "
     sha256sum --strict --check - <<<"$RASPBIAN_SHA256 *$IMAGE_ZIP" || die "Download checksum validation failed, please check http://www.raspberrypi.org/downloads"
 }
-echo 4
+echo 2
 env
 function _decompress_image {
     unzip -o "$IMAGE_ZIP" -d images || die "Could not unzip $IMAGE_ZIP"
@@ -127,7 +127,7 @@ EOF
         rm "$RASPBIAN_IMAGE_FILE"
     fi
 }
-echo 2
+echo 4
 env
 function _open_image {
     echo "Stupid Snaps"
@@ -170,7 +170,7 @@ function _prepare_chroot {
     mkdir -p apt_cache
     mount --bind apt_cache mnt/img_root/var/cache/apt/archives
 }
-echo 1
+echo 5
 env
 function _cleanup_chroot {
     _umount mnt/img_root/var/cache/apt/archives \
@@ -183,7 +183,7 @@ function _check_space_left {
     space_left=$(df | grep "dev/mapper/loop$LOOP_BASE\p2" | awk '{printf $4}')
     echo "Space left: ${space_left}K"
 }
-echo 0
+echo 6
 env
 function _count_authorized_keys_lines {
     authorized_keys_lines=$(wc -l < mnt/img_root/root/.ssh/authorized_keys)
@@ -204,7 +204,8 @@ function _modify_image {
     _count_authorized_keys_lines
     _cleanup_chroot
 }
-
+echo 7
+env
 function _usage {
     echo "
 Usage: $0 <--chroot|--noninteractive>
@@ -222,6 +223,9 @@ function _shell {
     chroot mnt/img_root bash -i
     _cleanup_chroot
 }
+
+echo 8
+env
 
 export LANG="C" LANGUAGE="C" LC_ALL="C.UTF-8"
 shopt -s nullglob
@@ -258,7 +262,8 @@ function _print_tag {
     echo "latest tag is '$tag'"
     echo
 }
-
+echo 9 
+env
 _print_tag
 
 RASPBIAN_TORRENT=images/$(basename $RASPBIAN_TORRENT_URL)
@@ -287,6 +292,9 @@ elif [[ "$1" == "--shell" ]]; then
 else
     die "Usage error. Try $0 --help"
 fi
+
+echo 10 
+env
 
 #if [[ $space_left -lt $MINIMAL_SPACE_LEFT ]]; then
 #    echo "Not enough space left."
