@@ -284,11 +284,15 @@ echo 11
 env
 
 _decompress_image
-_resize_image
-_open_image
-
 echo 12
 env
+_resize_image
+echo 13
+env
+_open_image
+echo 14
+env
+
 
 if [[ "$1" == "--chroot" ]] ; then
     _modify_image
@@ -302,7 +306,7 @@ else
     die "Usage error. Try $0 --help"
 fi
 
-echo 13 
+echo 15 
 env
 
 #if [[ $space_left -lt $MINIMAL_SPACE_LEFT ]]; then
