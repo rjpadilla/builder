@@ -130,22 +130,26 @@ EOF
 echo 4
 env
 function _open_image {
+    echo 13.0
     echo "Stupid Snaps"
     losetup -a | grep 'loop'
     echo "Loop-back mounting" "images/$RASPBIAN_IMAGE_FILE"
     # shellcheck disable=SC2086
     kpartx="$(kpartx -sav images/$RASPBIAN_IMAGE_FILE)" || die "Could not setup loop-back access to $RASPBIAN_IMAGE_FILE:$NL$kpartx"
     # shellcheck disable=SC2162
+    echo 13.1
     read -d '' img_boot_dev img_root_dev <<<"$(grep -o 'loop.p.' <<<"$kpartx")"
     test "$img_boot_dev" -a "$img_root_dev" || die "Could not extract boot and root loop device from kpartx output:$NL$kpartx"
     img_boot_dev=/dev/mapper/$img_boot_dev
     img_root_dev=/dev/mapper/$img_root_dev
     mkdir -p mnt/img_root
+    echo 13.2
     mount -t ext4 "$img_root_dev" mnt/img_root || die "Could not mount $img_root_dev mnt/img_root"
     mkdir -p mnt/img_root/boot || die "Could not mkdir mnt/img_root/boot"
     mount -t vfat "$img_boot_dev" mnt/img_root/boot || die "Could not mount $img_boot_dev mnt/img_root/boot"
     echo "Raspbian Image Details:"
     df -h mnt/img_root/boot mnt/img_root | sed -e "s#$(pwd)/##"
+    echo 13.3
 }
 
 function _close_image {
