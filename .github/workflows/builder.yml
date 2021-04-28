@@ -25,4 +25,4 @@ jobs:
           sudo pip install requests
           env
           echo $USERNAME
-          mkdir images && whoami env PATH=./node_modules/.bin:$PATH ./builder --noninteractive  
+          mkdir images && whoami; env; PATH=./node_modules/.bin:$PATH ./builder --noninteractive  
